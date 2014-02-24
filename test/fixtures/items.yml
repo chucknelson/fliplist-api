@@ -1,0 +1,49 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# This model initially had no columns defined.  If you add columns to the
+# model remove the '{}' from the fixture names and add the columns immediately
+# below each fixture, per the syntax in the comments below
+#
+#one: {}
+# column: value
+#
+#two: {}
+#  column: value
+
+### yummy treats!
+chocolate:
+  name: Chocolate
+  completed: true
+  sort_order: 0
+  list: yummy treats
+
+ice cream:
+  name: Ice Cream
+  completed: true
+  sort_order: 1
+  list: yummy treats
+
+waffles:
+  name: Waffles
+  completed: false
+  sort_order: 2
+  list: yummy treats
+
+### healthy veggies!
+carrots:
+  name: Carrots
+  completed: true
+  #sort_order: 0
+  list: healthy veggies
+
+lettuce:
+  name: Lettuce
+  completed: true
+  #sort_order: 0
+  list: healthy veggies
+
+tomatoes:
+  name: Tomatoes
+  completed: false
+  #sort_order: 0
+  list: healthy veggies

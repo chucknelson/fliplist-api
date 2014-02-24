@@ -58,3 +58,8 @@ gem 'thin', '1.6.1'
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
+
+group :test do
+  gem 'minitest-spec-rails', '4.7.6' #for spec style tests
+  gem 'turn', '0.9.6' #for nicer test result output/reporting
+end
