@@ -12,5 +12,17 @@ class ActiveSupport::TestCase
   fixtures :all
 
   # Add more helper methods to be used by all tests here...
+
+  # Test result format via Turn gem
   Turn.config.format = :outline
+
+  # Helper method for simple logging (debug only)
+  def log(msg)
+    Rails::logger.debug msg
+  end
+
+  # Helper method for standard JSON response body in functional tests
+  def json_response
+    ActiveSupport::JSON.decode @response.body
+  end
 end
