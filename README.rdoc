@@ -1,28 +1,12 @@
-== README
+== FlipList
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This is an implementation of a todo/shopping list using Rails 4 for the backend (serving pages, JSON API for data), and AngularJS for the frontend (views, data-binding, etc.).
 
-Things you may want to cover:
+This is mostly a learning exercise so there will no doubt be some mistakes made.
 
-* Ruby version
+The main goals are:
+* Fast response when completing lists (i.e., you want to mark an item complete and go when you're in the store, not wait for a server response)
+* Easy editing of lists, specifically item name modifications and list reordering
+* Clean and simple look
+* Graceful handling of update errors and syncing if network connectivity is unstable
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
