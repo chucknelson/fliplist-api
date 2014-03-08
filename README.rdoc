@@ -4,6 +4,8 @@ This is an implementation of a todo/shopping list using Rails 4 for the backend 
 
 This is mostly a learning exercise so there will no doubt be some mistakes made.
 
+A live Rails-only version, based on Rails 4 and only partially complete, can be found here[http://morning-bayou-7633.herokuapp.com/].
+
 The main goals are:
 * Fast response when completing lists (i.e., you want to mark an item complete and go when you're in the store, not wait for a server response)
 * Easy editing of lists, specifically item name modifications and list reordering
