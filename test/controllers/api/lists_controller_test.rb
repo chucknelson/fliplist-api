@@ -19,6 +19,7 @@ class Api::ListsControllerTest < ActionController::TestCase
       get :show, id: @list, :format => :json
       assert_response :success
       json_response['title'].must_equal @list.title
+      json_response['items'].count.must_equal @list.items.count
     end
 
     it 'should create a new list' do

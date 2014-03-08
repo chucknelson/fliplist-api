@@ -7,7 +7,7 @@ class Api::ListsController < ApplicationController
   end
 
   def show
-    respond_with :api, List.find(params[:id])
+    respond_with :api, List.find(params[:id]), :include => :items
   end
 
   def create

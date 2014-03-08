@@ -14,3 +14,9 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
+
+# Ignore dev node modules
+/node_modules
+
+# Ignore junit test ouput
+/test/angular/test_out

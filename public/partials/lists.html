@@ -1,0 +1,16 @@
+<div>  
+  <div id="list-container">
+    <div id="list-header">
+      <h3>My Lists</h3>
+    </div>
+    <div id="list-body">
+      <ul id="my-lists">
+        <li ng-repeat="list in lists">
+          <span><a ng-href="#/lists/{{list.id}}">{{list.title}}</a></span>
+        </li>
+      </ul>
+    </div>
+    <div id="list-footer">
+    </div>
+  </div>
+</div>
