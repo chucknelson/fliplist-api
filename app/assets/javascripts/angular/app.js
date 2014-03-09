@@ -7,18 +7,25 @@ var flipListApp = angular.module('flipListApp', [
 
 /* Services */
 
-flipListApp.factory('ListFactory', ['$resource', function($resource) {
-  return $resource('api/lists', {}, {
-    query: {method:'GET', isArray:true}
-  });
+flipListApp.factory('listProvider', ['$resource', function($resource) {
+  return {
+    lists: $resource('api/lists', {}, {
+      query: {method:'GET', isArray:true}
+    }),
+    list: $resource('api/lists/:listId', {}, {
+      query: {method:'GET'}
+    })
+  };
 }]);
 
 /* Controllers */
 
-flipListApp.controller('FlipListController', ['$scope', 'ListFactory', function($scope, ListFactory) {
-  $scope.working = 'Yes!';
+flipListApp.controller('FlipListController', ['$scope', 'listProvider', function($scope, listProvider) {
+  $scope.lists = listProvider.lists.query();
+}]);
 
-  $scope.lists = ListFactory.query();
+flipListApp.controller('FlipListDetailController', ['$scope', '$routeParams', 'listProvider', function($scope, $routeParams, listProvider) {
+  $scope.list = listProvider.list.query({listId: $routeParams.listId});
 }]);
 
 /* App Config */
@@ -30,6 +37,10 @@ flipListApp.config(['$routeProvider', '$locationProvider', function($routeProvid
     when('/', {
       templateUrl: 'partials/lists.html',
       controller: 'FlipListController'
+    }).
+    when('/lists/:listId', {
+      templateUrl: 'partials/list-detail.html',
+      controller: 'FlipListDetailController'
     }).
     otherwise({
       redirectTo: '/'
