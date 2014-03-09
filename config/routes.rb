@@ -9,6 +9,14 @@ FliplistApi::Application.routes.draw do
     end
   end
 
+  root 'home#index'
+
+  #to deal with angular partials
+  #route found via https://github.com/mkwiatkowski/todo-rails4-angularjs
+  #I like this approach rather than just using the public directory
+  #"normal" Rails approach and can use pre-processing if needed
+  get '/partials/:path.html' => 'home#partial', :constraints => { :path => /.+/  }
+
   # You can have the root of your site routed with "root"
   # root 'welcome#index'
 
