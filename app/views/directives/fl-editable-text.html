@@ -1,0 +1,15 @@
+<!-- 
+  fl-editable-text
+  Simple implementation of an editable text field.
+--> 
+
+<span ng-show="!isEditing">
+  <span>{{text}}</span>
+  <button ng-click="toggleEdit()">Edit</button>
+</span>
+
+<span ng-show="isEditing">
+  <input ng-model="text" ng-keydown="onKeyDown($event)">
+  <button ng-click="saveEdit()">Save</button>
+  <button ng-click="cancelEdit()">Cancel</button>
+</span>

@@ -7,5 +7,9 @@ class HomeController < ApplicationController
   def partial
     render :template => 'partials/' + params[:path], :layout => nil
   end
+  #TODO make a generic method that can render a template in any path based on a parameter
+  def directive
+    render :template => 'directives/' + params[:path], :layout => nil
+  end
 
 end

@@ -1,17 +1,22 @@
 <div>  
   <div id="list-container">
     <div id="list-header">
-      <h3>{{list.title}}</h3>
+      <h3>
+        <fl-editable-text ng-model="list.title" on-save="saveList()"></fl-editable-text>
+      </h3>
     </div>
     <div id="list-body">
       <ul id="list-items">
         <li ng-repeat="item in list.items">
-          <span><a ng-href="#/lists/{{list.id}}/items/{{item.id}}">{{item.name}}</a></span>
+          <span>{{item.name}}</span>
         </li>
       </ul>
     </div>
     <div id="list-footer">
       <a href="/">Back</a>
+    </div>
+    <div id="debug">
+      <fl-model-debug ng-model="list"></fl-model-debug>
     </div>
   </div>
 </div>

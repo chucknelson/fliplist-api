@@ -1,5 +1,8 @@
+'use strict'
+
 describe('FlipList Controllers', function() {
-  var scope, controller, $httpBackend, testLists, testList;
+  var scope, controller, routeParams, $httpBackend, 
+    testLists, testList;
 
   beforeEach(function() {
     module('flipListApp');
@@ -9,7 +12,7 @@ describe('FlipList Controllers', function() {
 
     //test data - TODO: move elsewhere? fixtures?
     testLists = [
-      {id:1, title:'List1', items:[{name:'Item 1'}, {name:'Item2'}]},
+      {id:1, title:'List1', items:[{id:1, name:'Item 1'}, {id:2, name:'Item2'}]},
       {id:2, title:'Empty List'}
       ];
     testList = testLists[0];
@@ -37,13 +40,15 @@ describe('FlipList Controllers', function() {
 
   describe('FlipListDetailController', function() {
 
-    beforeEach(inject(function($rootScope, $controller, $routeParams) {
+    beforeEach(inject(function($rootScope, $controller) {
       $httpBackend.expectGET('api/lists/' + testList.id).
         respond(testList);
 
-      $routeParams.listId = testList.id;
+      routeParams = {}; //passed in to controller so we can modify in tests
+      routeParams.listId = testList.id;
       scope = $rootScope.$new();
-      controller = $controller('FlipListDetailController', {$scope: scope});
+      controller = $controller('FlipListDetailController', {$scope: scope, $routeParams: routeParams});
+      
     }));
 
     it('should create "list" model fetched from api', function() {
@@ -51,6 +56,18 @@ describe('FlipList Controllers', function() {
       expect(scope.list.title).toBe(testList.title);
       expect(scope.list.items.length).toBe(testList.items.length);
     });
+
+    it('should update a list', function() {
+      $httpBackend.flush();
+      expect(scope.list.title).toBe('List1');
+
+      testList.title = 'Modified Title';
+      $httpBackend.expectPUT('api/lists/' + testList.id, testList).respond(200);
+      scope.list.title = testList.title;
+      scope.list.$update();
+      $httpBackend.flush();
+      expect(scope.list.title).toBe(testList.title);
+    })
 
   });
 

@@ -1,32 +1,14 @@
+'use strict'
+
 /* App Module */
 
 var flipListApp = angular.module('flipListApp', [
   'ngRoute',
-  'ngResource'
+  'ngResource',
+  'flipListControllers',
+  'flipListServices',
+  'flipListDirectives'
 ]);
-
-/* Services */
-
-flipListApp.factory('listProvider', ['$resource', function($resource) {
-  return {
-    lists: $resource('api/lists', {}, {
-      query: {method:'GET', isArray:true}
-    }),
-    list: $resource('api/lists/:listId', {}, {
-      query: {method:'GET'}
-    })
-  };
-}]);
-
-/* Controllers */
-
-flipListApp.controller('FlipListController', ['$scope', 'listProvider', function($scope, listProvider) {
-  $scope.lists = listProvider.lists.query();
-}]);
-
-flipListApp.controller('FlipListDetailController', ['$scope', '$routeParams', 'listProvider', function($scope, $routeParams, listProvider) {
-  $scope.list = listProvider.list.query({listId: $routeParams.listId});
-}]);
 
 /* App Config */
 

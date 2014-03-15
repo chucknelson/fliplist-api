@@ -16,6 +16,13 @@ class HomeControllerTest < ActionController::TestCase
       assert_template 'lists'
       assert_template :layout => nil
     end
+
+    it 'should render correct directive with no layout' do
+      get :directive, path: 'fl-editable-text'
+      assert_response :success
+      assert_template 'fl-editable-text'
+      assert_template :layout => nil
+    end
   end
 
 end

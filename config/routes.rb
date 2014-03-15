@@ -16,6 +16,7 @@ FliplistApi::Application.routes.draw do
   #I like this approach rather than just using the public directory
   #"normal" Rails approach and can use pre-processing if needed
   get '/partials/:path.html' => 'home#partial', :constraints => { :path => /.+/  }
+  get '/directives/:path.html' => 'home#directive', :constraints => { :path => /.+/  }
 
   # You can have the root of your site routed with "root"
   # root 'welcome#index'
