@@ -1,48 +1,43 @@
+'use strict'
+
 describe('FlipList', function() {
-  var ptor;
+  var ListsPage = require('./page-objects/lists-page.js');
 
   beforeEach(function() {
-    ptor = protractor.getInstance(); //works like browser()
+    //empty for now
   });
 
   describe('Lists View', function() {
-    var lists; 
+    var listsPage = new ListsPage();
 
     beforeEach(function () {
-      ptor.get('/');
-
-      lists = element.all(by.repeater('list in lists'));
+      listsPage.get('/');
     });
 
     it('should display 3 lists', function() {
-      expect(lists.count()).toBe(3);
+      expect(listsPage.lists.count()).toBe(3);
     });
   });
 
   describe('List Detail View', function() {
-    var listLinks, listLink, listItems;
+    var listsPage = new ListsPage();
+    var listDetailPage;
 
     beforeEach(function () {
-      ptor.get('/');
-      listLinks = element.all(by.repeater('list in lists'));
+      listsPage.get('/');
     });
 
     it('should display an empty list', function() {
-      listLink = listLinks.get(0).findElement(by.css('a'));
-      expect(listLink.getText()).toBe('Empty List');
-      
-      listLink.click();
-      listItems = element.all(by.repeater('item in list.items'));
-      expect(listItems.count()).toBe(0);
+      listDetailPage = listsPage.navigateToListAtIndex(0);
+      expect(listDetailPage.listTitle).toBe('Empty List');
+      expect(listDetailPage.listItems.count()).toBe(0);
     });
 
     it('should display a list with items', function() {
-      listLink = listLinks.get(1).findElement(by.css('a'));
-      expect(listLink.getText()).not.toBe('Empty List');
-
-      listLink.click();
-      listItems = element.all(by.repeater('item in list.items'));
-      expect(listItems.count()).toBe(3);
+      listDetailPage = listsPage.navigateToListAtIndex(1);
+      expect(listDetailPage.listTitle).not.toBe('Empty List');
+      expect(listDetailPage.listItems.count()).toBe(3);
     });
+
   });
 });

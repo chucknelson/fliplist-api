@@ -37,6 +37,13 @@ flipListDirectives.directive('flEditableText', function() {
         ngModel.$setViewValue(scope.text);
       });
 
+      scope.$watch('isEditing', function() {
+        if(scope.isEditing) { 
+          //the following breaks unit tests - why is focus() not available?
+          //element.find('input').eq(0).focus().select();
+        }
+      });
+
       scope.toggleEdit = function() { 
         scope.originalText = scope.text;
         scope.isEditing = !scope.isEditing;

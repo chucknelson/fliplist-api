@@ -6,7 +6,7 @@ function compileDirective(scope, tpl) {
   // compile the tpl with the $rootScope created above
   // wrap our directive inside a form to be able to test
   // that our form integration works well (via ngModelController)
-  if (!tpl) tpl = '<fl-editable-text ng-model="testList.title"></fl-editable-text>';
+  if (!tpl) return; //just return if template not passed
   // inject allows you to use AngularJS dependency injection
   // to retrieve and use other services
   inject(function($compile) {

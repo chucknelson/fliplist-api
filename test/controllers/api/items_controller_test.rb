@@ -11,6 +11,12 @@ class Api::ItemsControllerTest < ActionController::TestCase
   end
 
   describe 'Api::ItemsController' do
+    it 'should fetch items for a list' do
+      get :index, list_id: @list, :format => :json
+      assert_response :success
+      json_response.count.must_equal 3
+    end
+
     it 'should create a new item' do
       item_name = 'Cotton Candy'
       post :create, list_id: @list, item: {name: item_name}, :format => :json

@@ -2,6 +2,11 @@ class Api::ItemsController < ApplicationController
 
   respond_to :json
 
+  def index
+    @list = List.find(params[:list_id])
+    respond_with :api, @list, @list.items
+  end
+
   def create
     @list = List.find(params[:list_id])
     respond_with :api, @list, @list.items.create(item_params)

@@ -5,12 +5,21 @@
         <fl-editable-text ng-model="list.title" on-save="saveList()"></fl-editable-text>
       </h3>
     </div>
-    <div id="list-body">
+    <div id="list-body" ng-controller="FlipListItemsController">
       <ul id="list-items">
-        <li ng-repeat="item in list.items">
-          <span>{{item.name}}</span>
+        <li ng-repeat="item in items">
+          <fl-editable-text ng-model="item.name" on-save="saveItem($index)"></fl-editable-text>
+          <button ng-click="deleteItem($index)">Delete</button>
+        </li>
+        <li>
+          <form name="newItemForm" ng-submit="createItem(newItemName)">
+            <label for="name">New Item:</label>
+            <input name="name" type="text" ng-model="newItemName" required>
+            <input name="submit" type="submit">
+          </form>
         </li>
       </ul>
+      <fl-model-debug ng-model="items"></fl-model-debug>
     </div>
     <div id="list-footer">
       <a href="/">Back</a>
