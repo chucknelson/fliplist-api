@@ -7,19 +7,7 @@ describe('FlipList', function() {
     //empty for now
   });
 
-  describe('Lists View', function() {
-    var listsPage = new ListsPage();
-
-    beforeEach(function () {
-      listsPage.get('/');
-    });
-
-    it('should display 3 lists', function() {
-      expect(listsPage.lists.count()).toBe(3);
-    });
-  });
-
-  describe('List Detail View', function() {
+  describe('Navigating to Lists', function() {
     var listsPage = new ListsPage();
     var listDetailPage;
 
@@ -37,6 +25,25 @@ describe('FlipList', function() {
       listDetailPage = listsPage.navigateToListAtIndex(1);
       expect(listDetailPage.listTitle).not.toBe('Empty List');
       expect(listDetailPage.listItems.count()).toBe(3);
+    });
+    
+  });
+
+  //any destructive tests are last
+  describe('Viewing and Deleting Lists', function() {
+    var listsPage = new ListsPage();    
+
+    beforeEach(function () {
+      listsPage.get('/');
+    });
+
+    it('should display 3 lists', function() {
+      expect(listsPage.lists.count()).toBe(3);
+    });
+
+    it('should delete a list', function() {
+      listsPage.deleteListAtIndex(0);
+      expect(listsPage.lists.count()).toBe(2);
     });
 
   });

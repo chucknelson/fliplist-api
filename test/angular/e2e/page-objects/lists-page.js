@@ -15,6 +15,11 @@ var ListsPage = function () {
     return new ListDetailPage();
   };
 
+  this.deleteListAtIndex = function(index) {
+    this.lists.get(index).findElement(by.css('button')).click();
+    return this;
+  }
+
 };
 
 //return a ListsPage object when this JS file is 'require()'-ed
