@@ -8,6 +8,7 @@ var ListsPage = function () {
 
   this.get = function() {
     browser.get('/');
+    return this;
   };
 
   this.navigateToListAtIndex = function(index) {
@@ -15,10 +16,21 @@ var ListsPage = function () {
     return new ListDetailPage();
   };
 
+  this.navigateToList = function(title) {
+    element(by.linkText(title)).click();
+    return new ListDetailPage();
+  };
+
+  this.createNewList = function(title) {
+    element(by.model('newListTitle')).sendKeys(title);
+    element(by.name('submit')).click();
+    return this;
+  };
+
   this.deleteListAtIndex = function(index) {
     this.lists.get(index).findElement(by.css('button')).click();
     return this;
-  }
+  };
 
 };
 

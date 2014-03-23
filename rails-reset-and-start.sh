@@ -10,5 +10,5 @@ echo "Resetting database fixtures for testing..."
 rake db:migrate:reset db:fixtures:load
 
 echo "Starting Rails server in background..."
-rails s > rails-server-log.txt &
+rails s > log/rails-server.log &
 
