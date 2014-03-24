@@ -22,5 +22,6 @@ module FliplistApi
 
     # AngularJS
     config.assets.paths << "#{Rails.root}/vendor/assets/javascripts/angular-1.2.14"
+    config.assets.paths << "#{Rails.root}/vendor/assets/javascripts/jquery-ui-1.10.4/ui"
   end
 end

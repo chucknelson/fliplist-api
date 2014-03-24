@@ -6,7 +6,7 @@
       </h3>
     </div>
     <div id="list-body" ng-controller="FlipListItemsController">
-      <ul id="list-items">
+      <ul id="list-items" fl-sortable>
         <li ng-repeat="item in items">
           <fl-editable-text ng-model="item.name" on-save="saveItem($index)"></fl-editable-text>
           <button ng-click="deleteItem($index)">Delete</button>

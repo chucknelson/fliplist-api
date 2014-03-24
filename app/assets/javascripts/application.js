@@ -15,6 +15,9 @@
 
 // require turbolinks
 
+// no subdirectories in paths needed due to modification of config.assets.paths in application.rb
+//= require jquery-ui-1.10.4/ui/jquery-ui
+
 // AngularJS
 //= require angular
 //= require angular-route

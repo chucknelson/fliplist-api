@@ -17,6 +17,23 @@ flipListDirectives.directive('flModelDebug', function() {
   };
 });
 
+//wraps jquery-ui sortable
+flipListDirectives.directive('flSortable', function() {
+  return function(scope, element, attrs) {
+    var oldIndex;
+
+    element.sortable({
+      cancel: 'li > form',
+      start: function(event, ui) {
+        oldIndex = ui.item.index();
+      },
+      update: function(event, ui) {
+        console.log('Position Changed: ' + oldIndex + ' => ' + ui.item.index());
+      }
+    }); 
+  };
+});
+
 //TODO: review - this seems like a lot of code for very basic functionality
 flipListDirectives.directive('flEditableText', function() {
   return {
