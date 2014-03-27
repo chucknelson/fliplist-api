@@ -4,7 +4,7 @@ class Api::ItemsController < ApplicationController
 
   def index
     @list = List.find(params[:list_id])
-    respond_with :api, @list, @list.items
+    respond_with :api, @list, @list.items.order('sort_order')
   end
 
   def create
@@ -23,6 +23,6 @@ class Api::ItemsController < ApplicationController
 
   private
     def item_params
-      params.require(:item).permit(:name, :completed)
+      params.require(:item).permit(:name, :completed, :sort_order)
     end
 end

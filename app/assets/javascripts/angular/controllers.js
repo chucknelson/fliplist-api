@@ -28,16 +28,27 @@ flipListControllers.controller('FlipListDetailController', ['$scope', '$routePar
   };
 }]);
 
-flipListControllers.controller('FlipListItemsController', ['$scope', '$routeParams', 'Item', function($scope, $routeParams, Item) {
+flipListControllers.controller('FlipListItemsController', ['$scope', '$routeParams', 'filterFilter', 'orderByFilter', 'Item', function($scope, $routeParams, filterFilter, orderByFilter, Item) {
   $scope.items = Item.query({listId: $routeParams.listId});
   $scope.item = {};
+
+  $scope.sortItems = function() {
+    $scope.items = orderByFilter($scope.items, 'sort_order');
+  };
+
+  $scope.orderItem = function(itemId, sortOrder) {
+    var itemToOrder = filterFilter($scope.items, {id: itemId}).pop(); //filters return an array, but we're only getting one item
+    itemToOrder.sort_order = 99;
+    itemToOrder.$update();
+    $scope.sortItems();
+  };
 
   $scope.createItem = function(itemName) {
     var newItem = new Item({name: itemName, list_id: $routeParams.listId});
     $scope.items.push(newItem);
     newItem.$save();
     $scope.newItemName = ''
-  }
+  };
 
   $scope.saveItem = function(itemIndex) {
     $scope.item = $scope.items[itemIndex];
@@ -45,6 +56,7 @@ flipListControllers.controller('FlipListItemsController', ['$scope', '$routePara
   };
 
   $scope.deleteItem = function(itemIndex) {
+    console.log('deleteItem.itemIndex => ' + itemIndex);
     $scope.item = $scope.items[itemIndex];
     $scope.items.splice(itemIndex,1);
     $scope.item.$remove();

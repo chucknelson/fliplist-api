@@ -8,9 +8,13 @@
     <div id="list-body" ng-controller="FlipListItemsController">
       <ul id="list-items" fl-sortable>
         <li ng-repeat="item in items">
+          <input type="hidden" name="itemId" value="{{item.id}}">
           <fl-editable-text ng-model="item.name" on-save="saveItem($index)"></fl-editable-text>
           <button ng-click="deleteItem($index)">Delete</button>
+          sort_order: {{item.sort_order}}
         </li>
+      </ul>
+      <ul>
         <li>
           <form name="newItemForm" ng-submit="createItem(newItemName)">
             <label for="name">New Item:</label>
@@ -19,6 +23,7 @@
           </form>
         </li>
       </ul>
+      <button ng-click="orderItems()">Order Items Model</button>
       <fl-model-debug ng-model="items"></fl-model-debug>
     </div>
     <div id="list-footer">

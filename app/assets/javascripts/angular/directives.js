@@ -19,18 +19,22 @@ flipListDirectives.directive('flModelDebug', function() {
 
 //wraps jquery-ui sortable
 flipListDirectives.directive('flSortable', function() {
-  return function(scope, element, attrs) {
-    var oldIndex;
+  return {
+    link: function(scope, element, attrs) {
+      var oldIndex;
 
-    element.sortable({
-      cancel: 'li > form',
-      start: function(event, ui) {
-        oldIndex = ui.item.index();
-      },
-      update: function(event, ui) {
-        console.log('Position Changed: ' + oldIndex + ' => ' + ui.item.index());
-      }
-    }); 
+      element.sortable({
+        cancel: 'li > form',
+        start: function(event, ui) {
+          oldIndex = ui.item.index();
+        },
+        update: function(event, ui) {
+          var itemId = ui.item.find('input[name="itemId"]').val();
+          console.log('Position Changed: ' + ui.item.find('span.ng-binding').first().html() + ' : ' + oldIndex + ' => ' + ui.item.index());
+          scope.orderItem(itemId);
+        }
+      }); 
+    }
   };
 });
 
