@@ -33,17 +33,17 @@ waffles:
 carrots:
   name: Carrots
   completed: true
-  #sort_order: 0
+  sort_order: 0
   list: healthy veggies
 
 lettuce:
   name: Lettuce
   completed: true
-  #sort_order: 0
+  sort_order: 1
   list: healthy veggies
 
 tomatoes:
   name: Tomatoes
   completed: false
-  #sort_order: 0
+  sort_order: 2
   list: healthy veggies

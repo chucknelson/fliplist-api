@@ -17,23 +17,57 @@ flipListDirectives.directive('flModelDebug', function() {
   };
 });
 
-//wraps jquery-ui sortable
+//somewhat generic sorting directive which wraps jQuery UI sortable
+//when applied to any parent container the immediate child elements become sortable
+//child elements must contain a child hidden input named "id" that is a unique identifier for that element/data
+//when the jQuery UI sortable update() callback is triggered the directive provides an itemUpdates collection that
+//contains JS objects defined as {id, newSortOrder} for all elements that have a changed sort order
+//it also calls the method defined in the on-sort property for the directive
+//intended usage is to pass sortOrderUpdates to a method in your controller that updates the model represented by the sortable list.
 flipListDirectives.directive('flSortable', function() {
   return {
-    link: function(scope, element, attrs) {
-      var oldIndex;
+    //isolate scope
+    scope: {
+      onSort: '&'
+    },
+    compile: function(tElement, tAttrs) {
+      //could use compile if we needed to set up some common functionality for all instances. Since this is just a one-instance directive on my page right now, this has no real benefit...
+      return function link(scope, element, attrs) {
+        var oldSortOrder;
 
-      element.sortable({
-        cancel: 'li > form',
-        start: function(event, ui) {
-          oldIndex = ui.item.index();
-        },
-        update: function(event, ui) {
-          var itemId = ui.item.find('input[name="itemId"]').val();
-          console.log('Position Changed: ' + ui.item.find('span.ng-binding').first().html() + ' : ' + oldIndex + ' => ' + ui.item.index());
-          scope.orderItem(itemId);
-        }
-      }); 
+        element.sortable({
+          start: function(event, ui) {
+            oldSortOrder = ui.item.index();
+          },
+          update: function(event, ui) {
+            var itemId, sortOrderUpdates, newSortOrder, orderDiff, currentIndex, currentId;
+
+            itemId = ui.item.children('input[name="id"]').val();
+            newSortOrder = ui.item.index();
+
+            //determine items that require a sort order update
+            sortOrderUpdates = [];
+            orderDiff = newSortOrder - oldSortOrder;
+            currentIndex = newSortOrder;
+            for(var i = 0; i <= Math.abs(orderDiff); i++) {
+              currentId = ui.item.parent().children().eq(currentIndex).find('input[name="id"]').val();                         
+              sortOrderUpdates.push({id: currentId, newSortOrder: currentIndex});                         
+
+              if(orderDiff > 0) {
+                currentIndex--;
+              }
+              else {
+                currentIndex++;
+              }
+            };
+
+            //on-update method called in jquery world, so we need to wrap in $apply() to inform angular;
+            scope.$apply(function() {
+              scope.onSort({sortOrderUpdates: sortOrderUpdates});
+            });
+          }
+        });
+      }
     }
   };
 });

@@ -6,9 +6,9 @@
       </h3>
     </div>
     <div id="list-body" ng-controller="FlipListItemsController">
-      <ul id="list-items" fl-sortable>
+      <ul id="list-items" fl-sortable on-sort="orderItems(sortOrderUpdates)">
         <li ng-repeat="item in items">
-          <input type="hidden" name="itemId" value="{{item.id}}">
+          <input type="hidden" name="id" value="{{item.id}}">
           <fl-editable-text ng-model="item.name" on-save="saveItem($index)"></fl-editable-text>
           <button ng-click="deleteItem($index)">Delete</button>
           sort_order: {{item.sort_order}}

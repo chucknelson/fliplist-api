@@ -26,21 +26,30 @@ flipListControllers.controller('FlipListDetailController', ['$scope', '$routePar
   $scope.saveList = function() {
     $scope.list.$update();
   };
+
+  $scope.sortList = function(sortOrderUpdates) {
+    $scope.list.$sort({sort_order_updates: JSON.stringify(sortOrderUpdates)});
+  };
+
 }]);
 
 flipListControllers.controller('FlipListItemsController', ['$scope', '$routeParams', 'filterFilter', 'orderByFilter', 'Item', function($scope, $routeParams, filterFilter, orderByFilter, Item) {
   $scope.items = Item.query({listId: $routeParams.listId});
   $scope.item = {};
 
-  $scope.sortItems = function() {
+  $scope.orderItems = function(sortOrderUpdates) {
+    sortOrderUpdates.forEach(function(update) {
+      $scope.orderItem(update.id, update.newSortOrder);
+    });
+
+    $scope.sortList(sortOrderUpdates);
     $scope.items = orderByFilter($scope.items, 'sort_order');
   };
 
   $scope.orderItem = function(itemId, sortOrder) {
     var itemToOrder = filterFilter($scope.items, {id: itemId}).pop(); //filters return an array, but we're only getting one item
-    itemToOrder.sort_order = 99;
-    itemToOrder.$update();
-    $scope.sortItems();
+    itemToOrder.sort_order = sortOrder;
+    //itemToOrder.$update();
   };
 
   $scope.createItem = function(itemName) {
