@@ -27,8 +27,11 @@ flipListControllers.controller('FlipListDetailController', ['$scope', '$routePar
     $scope.list.$update();
   };
 
+  //the detail controller, which has the current list instance, is responsible for sending sort data to the list
   $scope.sortList = function(sortOrderUpdates) {
-    $scope.list.$sort({sort_order_updates: JSON.stringify(sortOrderUpdates)});
+    //not using instance of list because we want the order updates to be in the request payload, not as a querystring on the URL
+    //this seems like a weird limitation in angular, but this is how you send request payload data in a PUT/PATCH
+    List.sort({listId: $scope.list.id}, {sort_order_updates: sortOrderUpdates});
   };
 
 }]);
@@ -37,6 +40,7 @@ flipListControllers.controller('FlipListItemsController', ['$scope', '$routePara
   $scope.items = Item.query({listId: $routeParams.listId});
   $scope.item = {};
 
+  //the items controller, which has the items for the current list, is responsible for ordering the items model
   $scope.orderItems = function(sortOrderUpdates) {
     sortOrderUpdates.forEach(function(update) {
       $scope.orderItem(update.id, update.newSortOrder);
@@ -49,7 +53,6 @@ flipListControllers.controller('FlipListItemsController', ['$scope', '$routePara
   $scope.orderItem = function(itemId, sortOrder) {
     var itemToOrder = filterFilter($scope.items, {id: itemId}).pop(); //filters return an array, but we're only getting one item
     itemToOrder.sort_order = sortOrder;
-    //itemToOrder.$update();
   };
 
   $scope.createItem = function(itemName) {

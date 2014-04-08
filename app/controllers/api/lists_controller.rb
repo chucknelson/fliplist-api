@@ -24,7 +24,7 @@ class Api::ListsController < ApplicationController
 
   #custom actions
   def sort
-    @sort_order_updates = JSON.parse(params[:sort_order_updates])
+    @sort_order_updates = params[:sort_order_updates]
 
     #update items
     @sort_order_updates.each do |sort_update|
@@ -33,7 +33,7 @@ class Api::ListsController < ApplicationController
       Item.where({ id: item_id }).update_all(sort_order: item_sort) #skip model instantiation, which triggers an unnecessary SELECT
     end
 
-    respond_with nil
+    respond_with :api, nil
   end
 
 
