@@ -102,6 +102,7 @@ describe('FlipList Controllers', function() {
       routeParams.listId = testList.id;
       scope = $rootScope.$new();
 
+      //the items controller will be inside of a detail controller, so we'll provide an instance of one in cases where the inherited scope is used (e.g., orderItem())
       var detailController = $controller('FlipListDetailController', {$scope: scope, $routeParams: routeParams});
       controller = $controller('FlipListItemsController', {$scope: scope, $routeParams: routeParams});
 
