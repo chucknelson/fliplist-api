@@ -68,7 +68,6 @@ flipListControllers.controller('FlipListItemsController', ['$scope', '$routePara
   };
 
   $scope.deleteItem = function(itemIndex) {
-    console.log('deleteItem.itemIndex => ' + itemIndex);
     $scope.item = $scope.items[itemIndex];
     $scope.items.splice(itemIndex,1);
     $scope.item.$remove();

@@ -12,7 +12,7 @@ describe('FlipList Controllers', function() {
 
     //test data - TODO: move elsewhere? fixtures?
     testLists = [
-      {id:1, title:'List1', items:[{id:1, name:'Item 1', list_id:1}, {id:2, name:'Item2', list_id:1}]},
+      {id:1, title:'List1', items:[{id:1, name:'Item 1', sort_order: 0, list_id:1}, {id:2, name:'Item2', sort_order: 1, list_id:1}]},
       {id:2, title:'Empty List'}
       ];
     testList = testLists[0];
@@ -93,12 +93,16 @@ describe('FlipList Controllers', function() {
   describe('FlipListItemsController', function() {
 
     beforeEach(inject(function($rootScope, $controller) {
+      $httpBackend.expectGET('api/lists/' + testList.id).
+        respond(testList);
       $httpBackend.expectGET('api/lists/' + testList.id + '/items').
         respond(testList.items);
 
       routeParams = {}; //passed in to controller so we can modify in tests
       routeParams.listId = testList.id;
       scope = $rootScope.$new();
+
+      var detailController = $controller('FlipListDetailController', {$scope: scope, $routeParams: routeParams});
       controller = $controller('FlipListItemsController', {$scope: scope, $routeParams: routeParams});
 
       $httpBackend.flush(); //items populated in controller, ready to test
@@ -138,6 +142,22 @@ describe('FlipList Controllers', function() {
       $httpBackend.flush();
       expect(scope.items.length).toBe(testList.items.length - 1);
       expect(scope.items[0]).not.toBe(testItem);
+    });
+
+    it('should order items', function() {
+      var firstItem = scope.items[0];
+      var secondItem = scope.items[1];
+      expect(firstItem.sort_order).toBe(0);
+      expect(secondItem.sort_order).toBe(1);
+
+      //swap order
+      var sortOrderUpdates = [{id: firstItem.id, newSortOrder: 1}, {id: secondItem.id, newSortOrder: 0}];
+      $httpBackend.expectPATCH('api/lists/' + testList.id + '/sort').respond(200);
+      scope.orderItems(sortOrderUpdates);
+      $httpBackend.flush();
+
+      expect(firstItem.sort_order).toBe(1);
+      expect(secondItem.sort_order).toBe(0);
     });
 
   });

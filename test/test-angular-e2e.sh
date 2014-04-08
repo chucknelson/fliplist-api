@@ -15,3 +15,4 @@ $BASE_DIR/../node_modules/protractor/bin/protractor $BASE_DIR/../test/angular/co
 
 $BASE_DIR/../server_scripts/selenium-stop-server.sh
 $BASE_DIR/../server_scripts/rails-stop-server.sh
+$BASE_DIR/../server_scripts/rails-db-reset.sh
