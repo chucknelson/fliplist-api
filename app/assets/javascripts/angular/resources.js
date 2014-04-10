@@ -5,7 +5,7 @@ var flipListServices = angular.module('flipListServices', []);
 flipListServices.factory('List', ['$resource', function($resource) {
   return $resource('api/lists/:listId', {listId: '@id'}, {
       update: {method: 'PUT'},
-      sort: {method: 'PATCH', url: 'api/lists/:listId/sort'}
+      sort: {method: 'PATCH', url: 'api/lists/:listId/items/sort'}
     });
 }]);
 
