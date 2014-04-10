@@ -51,6 +51,38 @@ var ListDetailPage = function () {
     return this;
   };
 
+  this.moveItemToIndex = function(sourceIndex, targetIndex) {
+    var sourceItem, targetItem;
+    sourceItem = this.listItems.get(sourceIndex);
+    targetItem = this.listItems.get(targetIndex);
+
+    //work through elements via webdriver promises
+    //drag and drop when we have required data
+    var yOffset;
+    targetItem.getLocation().
+      then(function(targetLocation) { 
+        yOffset = targetLocation.y;
+      }).
+      then(function() {
+        return sourceItem.getLocation();
+      }).
+      then(function(sourceLocation) {
+        yOffset -= sourceLocation.y;
+        var yAdjust = yOffset < 0 ? -5 : 5;
+        yOffset += yAdjust; //required to trigger a sort with jQuery UI sortable behavior, see comment below
+      }).
+      then(function() {
+        browser.actions().dragAndDrop(sourceItem, {x: 0, y: yOffset}).perform();        
+      });
+
+    //can't use convenience method below because dragging directly on top of another item does not trigger a sort (at least via jQuery UI sortable)
+    //browser.actions().dragAndDrop(sourceItem, targetItem).perform();
+
+    return this;
+  };
+
+  
+
 };
 
 //return a ListDetailPage object when this JS file is 'require()'-ed

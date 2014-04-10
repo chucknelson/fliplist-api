@@ -91,6 +91,7 @@ describe('FlipList Controllers', function() {
   });
 
   describe('FlipListItemsController', function() {
+    var detailController;
 
     beforeEach(inject(function($rootScope, $controller) {
       $httpBackend.expectGET('api/lists/' + testList.id).
@@ -103,7 +104,7 @@ describe('FlipList Controllers', function() {
       scope = $rootScope.$new();
 
       //the items controller will be inside of a detail controller, so we'll provide an instance of one in cases where the inherited scope is used (e.g., orderItem())
-      var detailController = $controller('FlipListDetailController', {$scope: scope, $routeParams: routeParams});
+      detailController = $controller('FlipListDetailController', {$scope: scope, $routeParams: routeParams});
       controller = $controller('FlipListItemsController', {$scope: scope, $routeParams: routeParams});
 
       $httpBackend.flush(); //items populated in controller, ready to test

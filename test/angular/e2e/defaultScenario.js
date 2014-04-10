@@ -58,6 +58,26 @@ describe('FlipList', function() {
       expect(listDetailPage.getItemNameAtIndex(1)).toBe(newItemName);
     });
 
+    it('should sort items', function() {
+      var targetList = 'Yummy Treats';
+      listDetailPage = listsPage.navigateToList(targetList);
+
+      var oldFirstItemName = listDetailPage.getItemNameAtIndex(0);
+      var oldSecondItemName = listDetailPage.getItemNameAtIndex(1);
+      var oldThirdItemName = listDetailPage.getItemNameAtIndex(2);
+
+      listDetailPage.moveItemToIndex(0, 1);
+      var newFirstItemName = listDetailPage.getItemNameAtIndex(0);
+      expect(newFirstItemName).not.toBe(oldFirstItemName);
+      expect(newFirstItemName).toBe(oldSecondItemName);
+
+      listDetailPage.moveItemToIndex(1, 0);
+      listDetailPage.moveItemToIndex(2, 0);
+      newFirstItemName = listDetailPage.getItemNameAtIndex(0);
+      expect(newFirstItemName).not.toBe(oldFirstItemName);
+      expect(newFirstItemName).toBe(oldThirdItemName);
+    });
+
     //any additive or destructive tests are last, order matters because data is changed
     //is there a better way to do this / make things more independent? 
     //considering this is e2e, I don't think being truly independent is possible...?
@@ -89,6 +109,8 @@ describe('FlipList', function() {
       listDetailPage.deleteItemAtIndex(0);
       expect(listDetailPage.listItems.count()).toBe(2);
     });
+
+    
 
   });
 
