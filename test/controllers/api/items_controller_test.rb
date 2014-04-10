@@ -49,21 +49,6 @@ class Api::ItemsControllerTest < ActionController::TestCase
       @list.items_remaining.must_equal @default_remaining - 1
     end
 
-    it 'should sort items' do
-      #find items to change sort order
-      first_item = @list.items.find_by sort_order: 0
-      second_item = @list.items.find_by sort_order: 1
-
-      #prepare and send sort order update data to swap item order
-      sort_order_updates = ActiveSupport::JSON.encode([{id: first_item.id, newSortOrder: 1}, {id: second_item.id, newSortOrder: 0}]);
-      patch :sort, list_id: @list, sort_order_updates: sort_order_updates, :format => :json
-
-      #assert that the swap was successful
-      assert_response :success
-      @list.items.find_by(sort_order: 0).id.must_equal second_item.id
-      @list.items.find_by(sort_order: 1).id.must_equal first_item.id
-    end
-
   end
 
 end

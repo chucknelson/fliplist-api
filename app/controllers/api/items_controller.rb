@@ -21,19 +21,6 @@ class Api::ItemsController < ApplicationController
     respond_with :api, Item.destroy(params[:id])
   end
 
-  def sort
-    @sort_order_updates = JSON.parse(params[:sort_order_updates])
-
-    #update items
-    @sort_order_updates.each do |sort_update|
-      item_id = sort_update['id']
-      item_sort = sort_update['newSortOrder']
-      Item.where({ id: item_id }).update_all(sort_order: item_sort) #skip model instantiation, which triggers an unnecessary SELECT
-    end
-
-    respond_with :api, nil
-  end
-
   private
     def item_params
       params.require(:item).permit(:name, :completed, :sort_order)

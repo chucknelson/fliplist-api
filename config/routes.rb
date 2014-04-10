@@ -4,13 +4,9 @@ FliplistApi::Application.routes.draw do
 
   namespace :api, defaults: {format: 'json'} do
     resources :lists do
+      patch 'sort'
       resources :items do
-        collection do
-          put 'sort'
-          patch 'sort'
-        end
       end
-
     end
   end
 
