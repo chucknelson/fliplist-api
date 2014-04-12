@@ -141,7 +141,8 @@ describe('FlipList Controllers', function() {
     it('should delete an item', function() {
       var testItem = scope.items[0];
       $httpBackend.expectDELETE('api/lists/' + testList.id + '/items/' + testItem.id).respond(200);
-      scope.deleteItem(0);
+      $httpBackend.expectPATCH('api/lists/' + testList.id + '/sort').respond(200);
+      scope.deleteItem(testItem.id);
       $httpBackend.flush();
       expect(scope.items.length).toBe(testList.items.length - 1);
       expect(scope.items[0]).not.toBe(testItem);

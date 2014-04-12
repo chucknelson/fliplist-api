@@ -10,7 +10,7 @@
         <li ng-repeat="item in items">
           <input type="hidden" name="id" value="{{item.id}}">
           <fl-editable-text ng-model="item.name" on-save="saveItem($index)"></fl-editable-text>
-          <button ng-click="deleteItem($index)">Delete</button>
+          <button ng-click="deleteItem(item.id)">Delete</button>
           sort_order: {{item.sort_order}}
         </li>
       </ul>

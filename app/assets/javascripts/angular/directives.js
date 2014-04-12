@@ -53,7 +53,7 @@ flipListDirectives.directive('flSortable', function() {
               currentId = ui.item.parent().children().eq(currentIndex).find('input[name="id"]').val();                         
               sortOrderUpdates.push({id: currentId, newSortOrder: currentIndex});                         
               orderDiff > 0 ? currentIndex-- : currentIndex++;
-            };
+            }
 
             //on-update method called in jquery world, so we need to wrap in $apply() to inform angular;
             scope.$apply(function() {
@@ -111,10 +111,10 @@ flipListDirectives.directive('flEditableText', function() {
       }
 
       scope.onKeyDown = function(event) {
-        if (event.keyCode == 13) {
+        if(event.keyCode == 13) {
           scope.saveEdit();
         }
-        else if (event.keyCode == 27) {
+        else if(event.keyCode == 27) {
           scope.cancelEdit();
         }
       }

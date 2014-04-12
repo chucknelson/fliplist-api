@@ -40,11 +40,32 @@ flipListControllers.controller('FlipListItemsController', ['$scope', '$routePara
   $scope.items = Item.query({listId: $routeParams.listId});
   $scope.item = {};
 
+  $scope.getItem = function(itemId) {
+    //using fancy (and expensive?) angular filters, maybe I should just iterate the collection
+    return filterFilter($scope.items, {id: itemId}).pop(); //filters return an array, but we're only getting one item
+  };
+
   //the items controller, which has the items for the current list, is responsible for ordering the items model
   $scope.orderItems = function(sortOrderUpdates) {
-    sortOrderUpdates.forEach(function(update) {
-      $scope.orderItem(update.id, update.newSortOrder);
-    });
+    if(!sortOrderUpdates) {
+      var sortOrderUpdates = [];
+      var currentItem;
+      //if no sort order updates, figure out what has changed
+      //should flSortable be responsible for detecting when things change like when an item is deleted in the middle of the list/array?
+      //the controller should not be responsible for creating these updates
+      for(var i = 0; i < $scope.items.length; i++) {
+        if(i != $scope.items[i].sort_order) {
+          currentItem = $scope.items[i];
+          $scope.orderItem(currentItem.id, i);
+          sortOrderUpdates.push({id: currentItem.id, newSortOrder: i});  
+        }
+      }
+    }
+    else {
+      sortOrderUpdates.forEach(function(update) {
+        $scope.orderItem(update.id, update.newSortOrder);
+      });
+    }
 
     $scope.sortList(sortOrderUpdates);
     $scope.items = orderByFilter($scope.items, 'sort_order');
@@ -67,10 +88,17 @@ flipListControllers.controller('FlipListItemsController', ['$scope', '$routePara
     $scope.item.$update();
   };
 
-  $scope.deleteItem = function(itemIndex) {
-    $scope.item = $scope.items[itemIndex];
-    $scope.items.splice(itemIndex,1);
-    $scope.item.$remove();
+  $scope.deleteItem = function(itemId) {
+    for(var i = 0; i < $scope.items.length; i++) {
+      if($scope.items[i].id == itemId) {
+        $scope.items[i].$remove(); //api
+        $scope.items.splice(i, 1); //client model
+      }
+    }
+    
+    if($scope.items.length > 0) {
+      $scope.orderItems(null); //update remaining items order
+    }
   };
 
 }]);

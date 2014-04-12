@@ -47,7 +47,7 @@ var ListDetailPage = function () {
   };
 
   this.deleteItemAtIndex = function(index) {
-    this.listItems.get(index).findElement(by.css('[ng-click="deleteItem($index)"]')).click();
+    this.listItems.get(index).findElement(by.css('button[ng-click="deleteItem(item.id)"]')).click();
     return this;
   };
 
