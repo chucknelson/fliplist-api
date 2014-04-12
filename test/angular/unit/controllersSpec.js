@@ -116,13 +116,14 @@ describe('FlipList Controllers', function() {
     });
 
     it('should create an item', function() {
-      var newItem = {name: 'Item 3', list_id: testList.id};
+      var newItem = {name: 'Item 3', sort_order: testList.items.length, list_id: testList.id};
       $httpBackend.expectPOST('api/lists/' + testList.id + '/items', newItem).respond(200);
 
       scope.createItem(newItem.name);
       $httpBackend.flush();
       expect(scope.items.length).toBe(testList.items.length + 1);
       expect(scope.items[2].name).toBe(newItem.name);
+      expect(scope.items[2].sort_order).toBe(scope.items.length - 1) //0 indexed;
     });
 
     it('should update an item', function() {

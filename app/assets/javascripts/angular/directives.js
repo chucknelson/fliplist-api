@@ -52,13 +52,7 @@ flipListDirectives.directive('flSortable', function() {
             for(var i = 0; i <= Math.abs(orderDiff); i++) {
               currentId = ui.item.parent().children().eq(currentIndex).find('input[name="id"]').val();                         
               sortOrderUpdates.push({id: currentId, newSortOrder: currentIndex});                         
-
-              if(orderDiff > 0) {
-                currentIndex--;
-              }
-              else {
-                currentIndex++;
-              }
+              orderDiff > 0 ? currentIndex-- : currentIndex++;
             };
 
             //on-update method called in jquery world, so we need to wrap in $apply() to inform angular;

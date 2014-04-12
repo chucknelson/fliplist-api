@@ -78,6 +78,22 @@ describe('FlipList Directives', function() {
       expect(scope.testList.title).toBe(oldTitle);
     });
 
+  });
+
+//I think I just need to get jQuery loaded to get this working...
+//TODO: Not entirely sure what to test here - can I manually call sortable callbacks?
+//There is some test coverage for this directive in e2e tests at least
+  describe('FlipListSortable', function() {
+
+    beforeEach(function() {
+      //var directiveTemplate = '<ul fl-sortable on-sort="onSort(sortOrderUpdates)"><li>Item 1</li><li>Item 2</li><li>Item 3</li></ul>';
+      //elm = compileDirective(scope, directiveTemplate); //see helpers.js
+    });
+
+    it('should sort items', function() {
+      
+    });
 
   });
+
 });

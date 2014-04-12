@@ -56,7 +56,7 @@ flipListControllers.controller('FlipListItemsController', ['$scope', '$routePara
   };
 
   $scope.createItem = function(itemName) {
-    var newItem = new Item({name: itemName, list_id: $routeParams.listId});
+    var newItem = new Item({name: itemName, sort_order: $scope.items.length, list_id: $routeParams.listId});
     $scope.items.push(newItem);
     newItem.$save();
     $scope.newItemName = ''
