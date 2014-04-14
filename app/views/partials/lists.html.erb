@@ -7,7 +7,7 @@
       <ul id="my-lists">
         <li ng-repeat="list in lists">
           <span><a ng-href="#/lists/{{list.id}}">{{list.title}}</a></span>
-          <button ng-click="deleteList($index)">Delete</button>
+          <button ng-click="deleteList(list.id)">Delete</button>
         </li>
         <li>
           <form name="newListForm" ng-submit="createList(newListTitle)">

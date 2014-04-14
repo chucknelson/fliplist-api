@@ -5,6 +5,21 @@ var flipListControllers = angular.module('flipListControllers', []);
 flipListControllers.controller('FlipListController', ['$scope', 'List', function($scope, List) {
   $scope.lists = List.query();
 
+  //get list index, which is useful for interacting with the lists model/collection
+  $scope.getListIndex = function(listId) {
+    for(var i = 0; i < $scope.lists.length; i++) {
+      if($scope.lists[i].id == listId) {
+        return i;
+      }
+    }
+  };
+
+  //get an item, useful for when you want to work with an item instance
+  $scope.getList = function(listId) {
+    var listIndex = $scope.getListIndex(listId);
+    return $scope.lists[listIndex];
+  };
+
   $scope.createList = function(listName) {
     var newList = new List({title: listName});
     $scope.lists.push(newList);
@@ -12,10 +27,10 @@ flipListControllers.controller('FlipListController', ['$scope', 'List', function
     $scope.newListTitle = '';
   }
 
-  $scope.deleteList = function(listIndex) {
-    $scope.list = $scope.lists[listIndex];
+  $scope.deleteList = function(listId) {
+    var listIndex = $scope.getListIndex(listId);
+    $scope.lists[listIndex].$remove();
     $scope.lists.splice(listIndex,1);
-    $scope.list.$remove();
   };
 
 }]);
@@ -36,23 +51,35 @@ flipListControllers.controller('FlipListDetailController', ['$scope', '$routePar
 
 }]);
 
-flipListControllers.controller('FlipListItemsController', ['$scope', '$routeParams', 'filterFilter', 'orderByFilter', 'Item', function($scope, $routeParams, filterFilter, orderByFilter, Item) {
+flipListControllers.controller('FlipListItemsController', ['$scope', '$routeParams', 'orderByFilter', 'Item', function($scope, $routeParams, orderByFilter, Item) {
   $scope.items = Item.query({listId: $routeParams.listId});
   $scope.item = {};
 
+  //get item index, which is useful for interacting with the items model/collection
+  $scope.getItemIndex = function(itemId) {
+    for(var i = 0; i < $scope.items.length; i++) {
+      if($scope.items[i].id == itemId) {
+        return i;
+      }
+    }
+  };
+
+  //get an item, useful for when you want to work with an item instance
   $scope.getItem = function(itemId) {
-    //using fancy (and expensive?) angular filters, maybe I should just iterate the collection
-    return filterFilter($scope.items, {id: itemId}).pop(); //filters return an array, but we're only getting one item
+    var itemIndex = $scope.getItemIndex(itemId);
+    return $scope.items[itemIndex];
   };
 
   //the items controller, which has the items for the current list, is responsible for ordering the items model
   $scope.orderItems = function(sortOrderUpdates) {
+    //if no sort order updates, figure out what has changed
+    //should flSortable be responsible for detecting when things change like when an item is deleted in the middle of the list/array?
+    //maybe the controller should not be responsible for creating these updates?
+    //is this a good candidate for a service?
     if(!sortOrderUpdates) {
       var sortOrderUpdates = [];
       var currentItem;
-      //if no sort order updates, figure out what has changed
-      //should flSortable be responsible for detecting when things change like when an item is deleted in the middle of the list/array?
-      //the controller should not be responsible for creating these updates
+      
       for(var i = 0; i < $scope.items.length; i++) {
         if(i != $scope.items[i].sort_order) {
           currentItem = $scope.items[i];
@@ -67,12 +94,14 @@ flipListControllers.controller('FlipListItemsController', ['$scope', '$routePara
       });
     }
 
-    $scope.sortList(sortOrderUpdates);
-    $scope.items = orderByFilter($scope.items, 'sort_order');
+    if(sortOrderUpdates.length > 0) {
+      $scope.sortList(sortOrderUpdates);
+      $scope.items = orderByFilter($scope.items, 'sort_order');
+    }
   };
 
   $scope.orderItem = function(itemId, sortOrder) {
-    var itemToOrder = filterFilter($scope.items, {id: itemId}).pop(); //filters return an array, but we're only getting one item
+    var itemToOrder = $scope.getItem(itemId);
     itemToOrder.sort_order = sortOrder;
   };
 
@@ -83,18 +112,15 @@ flipListControllers.controller('FlipListItemsController', ['$scope', '$routePara
     $scope.newItemName = ''
   };
 
-  $scope.saveItem = function(itemIndex) {
-    $scope.item = $scope.items[itemIndex];
-    $scope.item.$update();
+  $scope.saveItem = function(itemId) {
+    var itemIndex = $scope.getItemIndex(itemId);
+    $scope.items[itemIndex].$update();
   };
 
   $scope.deleteItem = function(itemId) {
-    for(var i = 0; i < $scope.items.length; i++) {
-      if($scope.items[i].id == itemId) {
-        $scope.items[i].$remove(); //api
-        $scope.items.splice(i, 1); //client model
-      }
-    }
+    var itemIndex = $scope.getItemIndex(itemId);
+    $scope.items[itemIndex].$remove(); //api
+    $scope.items.splice(itemIndex, 1); //client model
     
     if($scope.items.length > 0) {
       $scope.orderItems(null); //update remaining items order

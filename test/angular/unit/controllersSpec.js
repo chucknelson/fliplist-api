@@ -49,7 +49,7 @@ describe('FlipList Controllers', function() {
     it('should delete a list', function() {
       var testList = scope.lists[0];
       $httpBackend.expectDELETE('api/lists/' + testList.id).respond(200);
-      scope.deleteList(0);
+      scope.deleteList(testList.id);
       $httpBackend.flush();
       expect(scope.lists.length).toBe(testLists.length - 1);
       expect(scope.lists[0]).not.toBe(testList);
@@ -133,7 +133,7 @@ describe('FlipList Controllers', function() {
 
       $httpBackend.expectPUT('api/lists/' + testList.id + '/items/' + testItem.id, testItem).respond(200);
       scope.items[0].name = testItem.name;
-      scope.saveItem(0);
+      scope.saveItem(testItem.id);
       $httpBackend.flush();
       expect(scope.items[0].name).toBe(testItem.name);
     });
@@ -162,6 +162,17 @@ describe('FlipList Controllers', function() {
 
       expect(firstItem.sort_order).toBe(1);
       expect(secondItem.sort_order).toBe(0);
+    });
+
+    it('should not order items if no sort orders have changed', function() {
+      var lastItem = scope.items[1];
+
+      //delete last item
+      $httpBackend.expectDELETE('api/lists/' + testList.id + '/items/' + lastItem.id).respond(200);
+      scope.deleteItem(lastItem.id);
+      $httpBackend.flush(); //a PATCH request for sort should NOT come through
+
+      expect(scope.items[1]).toBeUndefined(); //item should be deleted
     });
 
   });
