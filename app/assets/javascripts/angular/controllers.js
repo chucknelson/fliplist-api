@@ -107,8 +107,22 @@ flipListControllers.controller('FlipListItemsController', ['$scope', '$routePara
 
   $scope.createItem = function(itemName) {
     var newItem = new Item({name: itemName, sort_order: $scope.items.length, list_id: $routeParams.listId});
-    $scope.items.push(newItem);
-    newItem.$save();
+    //a learning moment: we can't push item into array before an item ID is received from the server
+    //via $save() because we're tracking items in ngRepeat by the item ID
+    //
+    //had to look into the angular source to figure out what ngRepeat was doing when the 
+    //value it "tracked by" was changing after the fact
+    //a change like this was NOT detected by angular because it was just one property
+    //in an object in a collection
+    //
+    //will need a unique static value from the client to remove the server dependence/latency
+    //hopefully will figure something else out later - a client-generated ID is the option I can immediately think of
+
+    //TODO: write a test for this ngrepeat behavior to make sure we don't regress later on
+    newItem.$save().then(function() {
+      $scope.items.push(newItem); //have the item ID from the server at this point
+    });
+
     $scope.newItemName = ''
   };
 
