@@ -78,6 +78,26 @@ describe('FlipList', function() {
       expect(newFirstItemName).toBe(oldThirdItemName);
     });
 
+    it('should not remove items when sorting a new item', function() {
+      var targetList = 'Yummy Treats';
+      listDetailPage = listsPage.navigateToList(targetList);
+
+      var newItemName = 'A New Item';
+      listDetailPage.createNewItem(newItemName); //will be index 3
+
+      var oldFirstItemName = listDetailPage.getItemNameAtIndex(0);
+      listDetailPage.moveItemToIndex(3, 0);
+      var newFirstItemName = listDetailPage.getItemNameAtIndex(0);
+      expect(newFirstItemName).toBe(newItemName);
+
+      //sort worked, but are all of the items still displayed?
+      expect(listDetailPage.listItems.count()).toBe(4);
+
+      //revert list to old state
+      listDetailPage.deleteItemAtIndex(0);
+      expect(listDetailPage.listItems.count()).toBe(3);
+    });
+
     //any additive or destructive tests are last, order matters because data is changed
     //is there a better way to do this / make things more independent? 
     //considering this is e2e, I don't think being truly independent is possible...?

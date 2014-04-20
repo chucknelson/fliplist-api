@@ -116,9 +116,8 @@ flipListControllers.controller('FlipListItemsController', ['$scope', '$routePara
     //in an object in a collection
     //
     //will need a unique static value from the client to remove the server dependence/latency
-    //hopefully will figure something else out later - a client-generated ID is the option I can immediately think of
-
-    //TODO: write a test for this ngrepeat behavior to make sure we don't regress later on
+    //hopefully will figure something else out later
+    //a client-generated ID just for ngRepeat purposes is the option I can immediately think of
     newItem.$save().then(function() {
       $scope.items.push(newItem); //have the item ID from the server at this point
     });
