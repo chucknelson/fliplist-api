@@ -2,8 +2,14 @@
 
 var flipListControllers = angular.module('flipListControllers', []);
 
-flipListControllers.controller('FlipListController', ['$scope', 'List', function($scope, List) {
-  $scope.lists = List.query();
+flipListControllers.controller('FlipListHomeController', ['$scope', 'User', function($scope, User) {
+  $scope.users = User.query();
+
+
+}]);
+
+flipListControllers.controller('FlipListListsController', ['$scope', '$routeParams', 'List', function($scope, $routeParams, List) {
+  $scope.lists = List.query({userId: $routeParams.userId});
 
   //get list index, which is useful for interacting with the lists model/collection
   $scope.getListIndex = function(listId) {
@@ -35,8 +41,8 @@ flipListControllers.controller('FlipListController', ['$scope', 'List', function
 
 }]);
 
-flipListControllers.controller('FlipListDetailController', ['$scope', '$routeParams', 'List', function($scope, $routeParams, List) {
-  $scope.list = List.get({listId: $routeParams.listId});
+flipListControllers.controller('FlipListListDetailController', ['$scope', '$routeParams', 'List', function($scope, $routeParams, List) {
+  $scope.list = List.get({userId: $routeParams.userId, listId: $routeParams.listId});
 
   $scope.saveList = function() {
     $scope.list.$update();
@@ -46,13 +52,13 @@ flipListControllers.controller('FlipListDetailController', ['$scope', '$routePar
   $scope.sortList = function(sortOrderUpdates) {
     //not using instance of list because we want the order updates to be in the request payload, not as a querystring on the URL
     //this seems like a weird limitation in angular, but this is how you send request payload data in a PUT/PATCH
-    List.sort({listId: $scope.list.id}, {sort_order_updates: sortOrderUpdates});
+    List.sort({userId: $routeParams.userId, listId: $routeParams.listId}, {sort_order_updates: sortOrderUpdates});
   };
 
 }]);
 
 flipListControllers.controller('FlipListItemsController', ['$scope', '$routeParams', 'orderByFilter', 'Item', function($scope, $routeParams, orderByFilter, Item) {
-  $scope.items = Item.query({listId: $routeParams.listId});
+  $scope.items = Item.query({userId: $routeParams.userId, listId: $routeParams.listId});
   $scope.item = {};
 
   //get item index, which is useful for interacting with the items model/collection
@@ -118,7 +124,7 @@ flipListControllers.controller('FlipListItemsController', ['$scope', '$routePara
     //will need a unique static value from the client to remove the server dependence/latency
     //hopefully will figure something else out later
     //a client-generated ID just for ngRepeat purposes is the option I can immediately think of
-    newItem.$save().then(function() {
+    newItem.$save({userId: $routeParams.userId}).then(function() {
       $scope.items.push(newItem); //have the item ID from the server at this point
     });
 
@@ -127,12 +133,12 @@ flipListControllers.controller('FlipListItemsController', ['$scope', '$routePara
 
   $scope.saveItem = function(itemId) {
     var itemIndex = $scope.getItemIndex(itemId);
-    $scope.items[itemIndex].$update();
+    $scope.items[itemIndex].$update({userId: $routeParams.userId});
   };
 
   $scope.deleteItem = function(itemId) {
     var itemIndex = $scope.getItemIndex(itemId);
-    $scope.items[itemIndex].$remove(); //api
+    $scope.items[itemIndex].$remove({userId: $routeParams.userId}); //api
     $scope.items.splice(itemIndex, 1); //client model
     
     if($scope.items.length > 0) {

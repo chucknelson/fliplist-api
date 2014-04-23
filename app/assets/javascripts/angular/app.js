@@ -17,12 +17,16 @@ flipListApp.config(['$routeProvider', '$locationProvider', function($routeProvid
 
   $routeProvider.
     when('/', {
-      templateUrl: 'partials/lists.html',
-      controller: 'FlipListController'
+      templateUrl: 'partials/users.html',
+      controller: 'FlipListHomeController'
     }).
-    when('/lists/:listId', {
+    when('/users/:userId/lists', {
+      templateUrl: 'partials/lists.html',
+      controller: 'FlipListListsController'
+    }).
+    when('/users/:userId/lists/:listId', {
       templateUrl: 'partials/list-detail.html',
-      controller: 'FlipListDetailController'
+      controller: 'FlipListListDetailController'
     }).
     otherwise({
       redirectTo: '/'

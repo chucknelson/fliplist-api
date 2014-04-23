@@ -5,6 +5,7 @@ class Api::ItemsControllerTest < ActionController::TestCase
   #test list and item available for all methods
   before do
     @list = List.find_by title: 'Yummy Treats'
+    @user = User.find(@list.user_id)
     @incomplete_item = @list.items.find_by completed: false
     @default_count = @list.items.count
     @default_remaining = @list.items_remaining
@@ -12,21 +13,21 @@ class Api::ItemsControllerTest < ActionController::TestCase
 
   describe 'Api::ItemsController' do
     it 'should fetch items for a list' do
-      get :index, list_id: @list, :format => :json
+      get :index, user_id: @user, list_id: @list, :format => :json
       assert_response :success
       json_response.count.must_equal 3
     end
 
     it 'should create a new item' do
       item_name = 'Cotton Candy'
-      post :create, list_id: @list, item: {name: item_name}, :format => :json
+      post :create, user_id: @user, list_id: @list, item: {name: item_name}, :format => :json
       assert_response :success
       json_response['name'].must_equal item_name
       @list.items.count.must_equal @default_count + 1
     end
 
     it 'should update an item as completed with PUT' do
-      put :update, list_id: @list, id: @incomplete_item, item: {completed: true}, :format => :json
+      put :update, user_id: @user, list_id: @list, id: @incomplete_item, item: {completed: true}, :format => :json
       assert_response :success
       @incomplete_item.reload
       @incomplete_item.completed.must_equal true
@@ -34,7 +35,7 @@ class Api::ItemsControllerTest < ActionController::TestCase
     end
 
     it 'should update an item as completed with PATCH' do
-      patch :update, list_id: @list, id: @incomplete_item, item: {completed: true}, :format => :json
+      patch :update, user_id: @user, list_id: @list, id: @incomplete_item, item: {completed: true}, :format => :json
       assert_response :success
       @incomplete_item.reload
       @incomplete_item.completed.must_equal true
@@ -42,7 +43,7 @@ class Api::ItemsControllerTest < ActionController::TestCase
     end
 
     it 'should delete an item' do
-      delete :destroy, list_id: @list, id: @incomplete_item, :format => :json
+      delete :destroy, user_id: @user, list_id: @list, id: @incomplete_item, :format => :json
       assert_response :success
       proc {Item.find(@incomplete_item.id)}.must_raise ActiveRecord::RecordNotFound
       @list.items.count.must_equal @default_count -1

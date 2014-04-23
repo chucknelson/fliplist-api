@@ -18,6 +18,10 @@ end
 # Use postgres as the database to minimize compatability issues with Heroku
 gem 'pg', '0.17.1'
 
+# bcrypt required for has_secure_password
+# rail < 4.1.0 requires bcrypt-ruby instead of bcrypt
+gem 'bcrypt-ruby', '3.1.5'
+
 # Use SCSS for stylesheets
 gem 'sass-rails', '4.0.1'
 

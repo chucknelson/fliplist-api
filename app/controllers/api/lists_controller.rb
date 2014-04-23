@@ -2,27 +2,39 @@ class Api::ListsController < ApplicationController
 
   respond_to :json
 
+  #GET
   def index
-    respond_with :api, List.all
+    @user = User.find(params[:user_id])
+    respond_with :api, @user, @user.lists
   end
 
+  #GET
   def show
     respond_with :api, List.find(params[:id])
   end
 
+  #POST
+  #needs to respond with nested resource
   def create
-    respond_with :api, List.create(list_params)
+    @user = User.find(params[:user_id])
+    respond_with :api, @user, List.create(list_params)
   end
 
+  #PUT
+  #doesn't respond with data
   def update
     respond_with :api, List.update(params[:id], list_params)
   end
 
+  #DELETE
+  #doesn't respond with data
   def destroy
     respond_with :api, List.destroy(params[:id])
   end
 
   #custom actions
+  #PATCH
+  #doesn't respond with data
   def sort
     @sort_order_updates = params[:sort_order_updates]
 

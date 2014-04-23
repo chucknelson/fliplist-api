@@ -6,7 +6,7 @@
     <div id="list-body">
       <ul id="my-lists">
         <li ng-repeat="list in lists">
-          <span><a ng-href="#/lists/{{list.id}}">{{list.title}}</a></span>
+          <span><a ng-href="#/users/{{list.user_id}}/lists/{{list.id}}">{{list.title}}</a></span>
           <button ng-click="deleteList(list.id)">Delete</button>
         </li>
         <li>
