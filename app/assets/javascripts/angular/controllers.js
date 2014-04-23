@@ -29,13 +29,13 @@ flipListControllers.controller('FlipListListsController', ['$scope', '$routePara
   $scope.createList = function(listName) {
     var newList = new List({title: listName});
     $scope.lists.push(newList);
-    newList.$save();
+    newList.$save({userId: $routeParams.userId});
     $scope.newListTitle = '';
   }
 
   $scope.deleteList = function(listId) {
     var listIndex = $scope.getListIndex(listId);
-    $scope.lists[listIndex].$remove();
+    $scope.lists[listIndex].$remove({userId: $routeParams.userId});
     $scope.lists.splice(listIndex,1);
   };
 
