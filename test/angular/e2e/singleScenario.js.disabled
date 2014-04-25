@@ -1,12 +1,13 @@
 'use strict'
 
 describe('FlipList', function() {
-  var ListsPage = require('./page-objects/lists-page.js');
-  var listsPage, listDetailPage;
+  var UsersPage = require('./page-objects/users-page.js');
+  var usersPage, listsPage, listDetailPage;
 
   beforeEach(function() {
-    listsPage = new ListsPage();
-    listsPage.get('/');
+    usersPage = new UsersPage();
+    usersPage.get();
+    listsPage = usersPage.navigateToUserAtIndex(0);
   });
 
   describe('Single Scenario', function() {
@@ -14,20 +15,14 @@ describe('FlipList', function() {
     beforeEach(function () {
     });
 
-    it('should not lose items when sorting a new item', function() {
-      var targetList = 'Yummy Treats';
+    it('should display an empty list and then go back to lists page', function() {
+      var targetList = 'Empty List';
       listDetailPage = listsPage.navigateToList(targetList);
+      expect(listDetailPage.listTitle.getText()).toBe(targetList);
+      expect(listDetailPage.listItems.count()).toBe(0);
 
-      var newItemName = 'A New Item';
-      listDetailPage.createNewItem(newItemName); //will be index 3
-
-      var oldFirstItemName = listDetailPage.getItemNameAtIndex(0);
-      listDetailPage.moveItemToIndex(3, 0);
-      var newFirstItemName = listDetailPage.getItemNameAtIndex(0);
-      expect(newFirstItemName).toBe(newItemName);
-
-      //sort worked, but are all of the items still displayed?
-      expect(listDetailPage.listItems.count()).toBe(4);
+      listsPage = listDetailPage.navigateToListsPage();
+      expect(listsPage.lists.count()).toBe(3);
     });
 
   });

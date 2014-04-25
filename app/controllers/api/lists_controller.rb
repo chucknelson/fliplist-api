@@ -17,7 +17,7 @@ class Api::ListsController < ApplicationController
   #needs to respond with nested resource
   def create
     @user = User.find(params[:user_id])
-    respond_with :api, @user, List.create(list_params)
+    respond_with :api, @user, @user.lists.create(list_params)
   end
 
   #PUT

@@ -32,6 +32,7 @@ class Api::ListsControllerTest < ActionController::TestCase
       post :create, user_id: @user, list: {title: list_title}, :format => :json
       assert_response :success
       json_response['title'].must_equal list_title
+      json_response['user_id'].must_equal @user.id
       List.count.must_equal @default_count + 1
     end
 

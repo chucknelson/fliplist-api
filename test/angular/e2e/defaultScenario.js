@@ -5,12 +5,13 @@
 //(2) Look into promises more and see if I can have the page object methods use strings/names instead of index values
 
 describe('FlipList', function() {
-  var ListsPage = require('./page-objects/lists-page.js');
-  var listsPage, listDetailPage;
+  var UsersPage = require('./page-objects/users-page.js');
+  var usersPage, listsPage, listDetailPage;
 
   beforeEach(function() {
-    listsPage = new ListsPage();
-    listsPage.get('/');
+    usersPage = new UsersPage();
+    usersPage.get();
+    listsPage = usersPage.navigateToUserAtIndex(0);
   });
 
   describe('Navigating to Lists', function() {
