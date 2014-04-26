@@ -20,3 +20,6 @@
 
 # Ignore junit test ouput
 /test/angular/test_out
+
+# Ignore the rails secret token
+/config/initializers/secret_token.rb
