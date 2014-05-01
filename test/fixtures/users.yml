@@ -5,7 +5,12 @@
 # below each fixture, per the syntax in the comments below
 #
 
+<%
+  user1 = User.new
+  user1.password = 'password'
+%>
 user1:
   email: user1@gmail.com
   name: User 1
+  password_digest: <%= user1.password_digest %>
 

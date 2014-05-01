@@ -3,6 +3,8 @@ FliplistApi::Application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   namespace :api, defaults: {format: 'json'} do
+    resources :sessions, only: [:create, :destroy]
+
     resources :users do
       resources :lists do
         patch 'sort'
