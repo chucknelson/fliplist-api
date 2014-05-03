@@ -4,6 +4,8 @@ FliplistApi::Application.routes.draw do
 
   namespace :api, defaults: {format: 'json'} do
     resources :sessions, only: [:create, :destroy]
+    post 'login' => 'sessions#create'
+    delete 'logout' => 'sessions#destroy'
 
     resources :users do
       resources :lists do
