@@ -7,6 +7,7 @@ var flipListApp = angular.module('flipListApp', [
   'ngResource',
   'flipListControllers',
   'flipListServices',
+  'flipListResources',
   'flipListDirectives'
 ]);
 
@@ -17,12 +18,15 @@ flipListApp.config(['$routeProvider', '$locationProvider', function($routeProvid
 
   $routeProvider.
     when('/', {
-      templateUrl: 'partials/users.html',
-      controller: 'FlipListHomeController'
+      templateUrl: 'partials/login.html',
+      controller: 'FlipListLoginController'
     }).
     when('/users/:userId/lists', {
       templateUrl: 'partials/lists.html',
-      controller: 'FlipListListsController'
+      controller: 'FlipListListsController',
+      resolve: {
+        factory: checkLogin
+      }
     }).
     when('/users/:userId/lists/:listId', {
       templateUrl: 'partials/list-detail.html',
@@ -32,4 +36,19 @@ flipListApp.config(['$routeProvider', '$locationProvider', function($routeProvid
       redirectTo: '/'
     });
 }]);
+
+//TODO - instead of this, just pass in userLogin service above?
+var checkLogin = function ($q, $rootScope, $location, userLogin) {
+  console.log('app.checkLogin() => userLogin.currentUser => ' + JSON.stringify(userLogin.currentUser()));
+
+  if (userLogin.currentUser()) {
+    console.log('app.checkLogin() => Logged In');
+    return true;
+  } 
+  else {
+    console.log('app.checkLogin() => Not Logged In, Redirecting to /');
+    $location.path("/");
+    return false;
+  }
+};
 
