@@ -25,30 +25,29 @@ flipListApp.config(['$routeProvider', '$locationProvider', function($routeProvid
       templateUrl: 'partials/lists.html',
       controller: 'FlipListListsController',
       resolve: {
-        factory: checkLogin
+        loggedIn: function(userLogin) {
+          return userLogin.checkLogin();
+        }
       }
     }).
     when('/users/:userId/lists/:listId', {
       templateUrl: 'partials/list-detail.html',
-      controller: 'FlipListListDetailController'
+      controller: 'FlipListListDetailController',
+      resolve: {
+        loggedIn: function(userLogin) {
+          return userLogin.checkLogin();
+        }
+      }
     }).
     otherwise({
       redirectTo: '/'
     });
 }]);
 
-//TODO - instead of this, just pass in userLogin service above?
-var checkLogin = function ($q, $rootScope, $location, userLogin) {
-  console.log('app.checkLogin() => userLogin.currentUser => ' + JSON.stringify(userLogin.currentUser()));
+/* Generic App Actions */
 
-  if (userLogin.currentUser()) {
-    console.log('app.checkLogin() => Logged In');
-    return true;
-  } 
-  else {
-    console.log('app.checkLogin() => Not Logged In, Redirecting to /');
-    $location.path("/");
-    return false;
-  }
-};
-
+flipListApp.run(['$rootScope', '$location', '$route', function($rootScope, $location, $route) {
+  $rootScope.$on('$routeChangeStart', function(event) {
+    //nothing right now, might be a central place to check login
+  });
+}]);

@@ -2,34 +2,50 @@
 
 var flipListServices = angular.module('flipListServices', []);
 
-flipListServices.service('userLogin', ['$http', '$q', function($http, $q) {
+flipListServices.service('userLogin', ['$http', '$location', '$route', function($http, $location, $route) {
   var currentUser;
 
   return {
-    currentUser: function(val) {
-      if(val) {
-        currentUser = val;
+    currentUser: function(user) {
+      if(user) {
+        currentUser = user;
       }
       return currentUser;
+    },
+    checkLogin: function() {
+      var routeUserId = $route.current.params.userId;
+      if(this.currentUser() && this.currentUser().id == routeUserId) {
+        console.log('userLogin.checkLogin() => Logged In => ' + this.currentUser().id);
+        return true;
+      } 
+      else if(this.currentUser()) {
+        console.log('userLogin.checkLogin() => Current User ID is ' + this.currentUser().id + ', Requested User ID of ' + routeUserId + ' Not Logged In');
+        $location.path("/");
+        return false;
+      }
+      else {
+        console.log('userLogin.checkLogin() => No User Logged In');
+        $location.path("/");
+        return false;
+      }
     },
     //login function uses promises to deal with async
     //have to wait for server response before we can proceed
     login: function(email, password) {
       var userLoginService = this; //need this for $http scope
-      var deferred = $q.defer();
 
-      $http.post('/api/login', {email: email, password: password})
-        .success(function(response, status, headers) {
-          userLoginService.currentUser(response);
-          deferred.resolve();
-        })
-        .error(function(response, status) {
-          userLoginService.currentUser(null);
-          console.log('Invalid Login! => ' + JSON.stringify(response) + ' : ' + status);
-          deferred.reject();
-        });
-
-        return deferred.promise;
+      //$http methods return a promise, so we'll return its return value
+      //caller can use .then() and use success or error callbacks normally
+      return $http.post('/api/login', {email: email, password: password})
+          .success(function(response, status, headers) {
+            userLoginService.currentUser(response);
+            //success callback / resolved promise
+          })
+          .error(function(response, status) {
+            userLoginService.currentUser(null);
+            console.log('Invalid Login! => ' + JSON.stringify(response) + ' : ' + status);
+            //error callback / rejected promise
+          });
     }
   }
 }]);

@@ -3,29 +3,24 @@
 var flipListControllers = angular.module('flipListControllers', []);
 
 flipListControllers.controller('FlipListHomeController', ['$scope', 'User', function($scope, User) {
-  
-
 
 }]);
 
 flipListControllers.controller('FlipListLoginController', ['$scope', '$http', '$location', 'userLogin', function($scope, $http, $location, userLogin) {
 
   $scope.login = function() {
-    userLogin.login($scope.login.email, $scope.login.password)
+    userLogin.login($scope.email, $scope.password)
       .then(
         //success
-        function() {
+        function(success) {
           $location.path('/users/' + userLogin.currentUser().id + '/lists');
         },
         //failure
-        function() {
+        function(rejection) {
           console.log('$scope.login failure');
         }
       );
   };
-
-  
-
 
 }]);
 
