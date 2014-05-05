@@ -48,6 +48,6 @@ flipListApp.config(['$routeProvider', '$locationProvider', function($routeProvid
 
 flipListApp.run(['$rootScope', '$location', '$route', function($rootScope, $location, $route) {
   $rootScope.$on('$routeChangeStart', function(event) {
-    //nothing right now, might be a central place to check login
+    //nothing right now, might be a central place to perform checkLogin
   });
 }]);

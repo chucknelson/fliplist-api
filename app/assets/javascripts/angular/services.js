@@ -15,16 +15,16 @@ flipListServices.service('userLogin', ['$http', '$location', '$route', function(
     checkLogin: function() {
       var routeUserId = $route.current.params.userId;
       if(this.currentUser() && this.currentUser().id == routeUserId) {
-        console.log('userLogin.checkLogin() => Logged In => ' + this.currentUser().id);
+        console.log('userLogin.checkLogin() => Logged In: ' + this.currentUser().id);
         return true;
       } 
       else if(this.currentUser()) {
-        console.log('userLogin.checkLogin() => Current User ID is ' + this.currentUser().id + ', Requested User ID of ' + routeUserId + ' Not Logged In');
+        console.log('userLogin.checkLogin() => Error: Current User ID is ' + this.currentUser().id + ', Requested User ID of ' + routeUserId + ' Not Logged In');
         $location.path("/");
         return false;
       }
       else {
-        console.log('userLogin.checkLogin() => No User Logged In');
+        console.log('userLogin.checkLogin() => Error: No User Logged In');
         $location.path("/");
         return false;
       }
@@ -36,14 +36,15 @@ flipListServices.service('userLogin', ['$http', '$location', '$route', function(
 
       //$http methods return a promise, so we'll return its return value
       //caller can use .then() and use success or error callbacks normally
-      return $http.post('/api/login', {email: email, password: password})
+      return $http.post('api/login', {email: email, password: password})
           .success(function(response, status, headers) {
             userLoginService.currentUser(response);
+            console.log('userLogin.login() => Success')
             //success callback / resolved promise
           })
           .error(function(response, status) {
             userLoginService.currentUser(null);
-            console.log('Invalid Login! => ' + JSON.stringify(response) + ' : ' + status);
+            console.log('userLogin.login() => Error: ' + JSON.stringify(response) + ' : ' + status);
             //error callback / rejected promise
           });
     }

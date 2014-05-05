@@ -13,11 +13,12 @@ flipListControllers.controller('FlipListLoginController', ['$scope', '$http', '$
       .then(
         //success
         function(success) {
+          console.log('$scope.login() => Success');
           $location.path('/users/' + userLogin.currentUser().id + '/lists');
         },
-        //failure
+        //error
         function(rejection) {
-          console.log('$scope.login failure');
+          console.log('$scope.login() => Error');
         }
       );
   };

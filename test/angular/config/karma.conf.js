@@ -6,7 +6,8 @@ module.exports = function(config){
       'vendor/assets/javascripts/angular-1.2.14/angular.js',
       'vendor/assets/javascripts/angular-1.2.14/angular-*.js',
       'app/assets/javascripts/angular/*.js',
-      'test/angular/unit/**/*.js',
+      //'test/angular/unit/**/*.js',
+      'test/angular/unit/**/servicesSpec.js',
       'app/views/directives/**/*.html'
     ],
 
